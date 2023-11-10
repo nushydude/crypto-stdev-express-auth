@@ -45,7 +45,7 @@ app.use(express.json());
 // Only allow requests is the X-API-KEY header is set to correct secret
 app.use(gatewayKeyMiddleware);
 
-app.get("/api/status", (req, res) => res.send({ status: "ok" }));
+app.get("/api/status", (_req, res) => res.send({ status: "ok" }));
 
 app.post("/api/users", signUp);
 app.post("/api/sessions", logIn);
