@@ -47,11 +47,11 @@ app.use(gatewayKeyMiddleware);
 
 app.get("/api/status", (req, res) => res.send({ status: "ok" }));
 
-app.post("/api/user", signUp);
-app.post("/api/auth/login", logIn);
-app.post("/api/auth/logout", logOut);
-app.post("/api/auth/refresh", generateNewAccessToken);
-app.post("/api/auth/forgot", sendResetPasswordEmail);
+app.post("/api/users", signUp);
+app.post("/api/sessions", logIn);
+app.delete("/api/sessions", logOut);
+app.post("/api/session/refresh", generateNewAccessToken);
+app.post("/api/users/forgot", sendResetPasswordEmail);
 
 app.use(Sentry.Handlers.errorHandler());
 
