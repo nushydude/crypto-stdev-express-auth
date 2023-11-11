@@ -50,7 +50,7 @@ app.get("/api/status", (_req, res) => res.send({ status: "ok" }));
 app.post("/api/users", signUp);
 app.post("/api/sessions", logIn);
 app.delete("/api/sessions/:refreshToken", logOut);
-app.post("/api/session/refresh", generateNewAccessToken);
+app.post("/api/sessions/refresh", generateNewAccessToken);
 app.post("/api/users/forgot", sendResetPasswordEmail);
 
 app.use(Sentry.Handlers.errorHandler());
