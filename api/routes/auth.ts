@@ -1,12 +1,12 @@
 import Sentry from "@sentry/node";
 import { Request, Response } from "express";
+import { ParamsDictionary } from "express-serve-static-core";
 import {
   signUpWithEmail,
   logInWithEmail,
   generateNewAccessTokenFromRefreshToken,
   deleteRefreshToken,
-  sendResetPasswordEmailToUser,
-  getUserByUserId
+  sendResetPasswordEmailToUser
 } from "../utils/db.js";
 
 interface SignUpRequestBody {
@@ -35,6 +35,10 @@ interface SendResetPasswordEmailReqestBody {
 
 interface RequestWithUser extends Request {
   userId?: string;
+}
+
+interface RequestParamsWithRefreshToken extends ParamsDictionary {
+  refreshtoken?: string;
 }
 
 export const signUp = async (
@@ -89,6 +93,28 @@ export const logIn = async (
   }
 };
 
+export const logOut = async (
+  req: Request<RequestParamsWithRefreshToken, {}, {}>,
+  res: Response
+) => {
+  console.log("logOut");
+
+  const { refreshToken } = req.params;
+
+  try {
+    const { errorMessage } = await deleteRefreshToken(refreshToken);
+
+    if (errorMessage) {
+      return res.status(400).json({ errorMessage });
+    }
+
+    return res.status(204).send();
+  } catch (error) {
+    Sentry.captureException(error);
+    return res.status(500).send();
+  }
+};
+
 export const generateNewAccessToken = async (
   req: Request<{}, {}, GenerateNewAccessTokenBody>,
   res: Response
@@ -112,28 +138,6 @@ export const generateNewAccessToken = async (
   }
 };
 
-export const logOut = async (
-  req: Request<{}, {}, LogOutRequestBody>,
-  res: Response
-) => {
-  console.log("logOut");
-
-  const { refreshToken } = req.body;
-
-  try {
-    const { errorMessage } = await deleteRefreshToken(refreshToken);
-
-    if (errorMessage) {
-      return res.status(400).json({ errorMessage });
-    }
-
-    return res.status(204).send();
-  } catch (error) {
-    Sentry.captureException(error);
-    return res.status(500).send();
-  }
-};
-
 export const sendResetPasswordEmail = async (
   req: Request<{}, {}, SendResetPasswordEmailReqestBody>,
   res: Response
@@ -147,36 +151,6 @@ export const sendResetPasswordEmail = async (
 
     // We don't want to send a specfic message for security reasons.
     return res.status(204).send();
-  } catch (error) {
-    Sentry.captureException(error);
-    return res.status(500).send();
-  }
-};
-
-export const getProfile = async (req: RequestWithUser, res: Response) => {
-  console.log("getProfile");
-
-  const { userId } = req;
-
-  if (!userId) {
-    return res.status(401).json({ errorMessage: "Unauthorized" });
-  }
-
-  try {
-    const user = await getUserByUserId(userId);
-
-    if (!user) {
-      return res.status(401).json({ errorMessage: "Unauthorized" });
-    }
-
-    const transformedUser = {
-      firstname: user.firstname,
-      lastname: user.lastname,
-      email: user.email,
-      settings: user.settings || {}
-    };
-
-    return res.json(transformedUser);
   } catch (error) {
     Sentry.captureException(error);
     return res.status(500).send();

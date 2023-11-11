@@ -49,7 +49,7 @@ app.get("/api/status", (_req, res) => res.send({ status: "ok" }));
 
 app.post("/api/users", signUp);
 app.post("/api/sessions", logIn);
-app.delete("/api/sessions", logOut);
+app.delete("/api/sessions/:refreshToken", logOut);
 app.post("/api/session/refresh", generateNewAccessToken);
 app.post("/api/users/forgot", sendResetPasswordEmail);
 
