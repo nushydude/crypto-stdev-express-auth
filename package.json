@@ -27,7 +27,7 @@
     "nodemailer": "^6.9.7",
     "onesignal-node": "^3.4.0",
     "query-string": "^7.1.1",
-    "typescript": "^5.2.2",
+    "typescript": "^5.4.5",
     "validator": "^13.11.0"
   },
   "devDependencies": {
