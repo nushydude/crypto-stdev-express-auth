@@ -5,12 +5,13 @@
   "main": "api/index.js",
   "type": "module",
   "engines": {
-    "node": ">=16.17.0"
+    "node": ">=20"
   },
   "scripts": {
     "start": "tsx api/index.ts",
     "dev": "nodemon --exec tsx api/index.ts",
-    "test_skipped_for_now": "NODE_OPTIONS=--experimental-vm-modules jest"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "author": "",
   "license": "ISC",
@@ -43,6 +44,9 @@
     "pre-commit": "^1.2.2",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.1",
-    "tsx": "^4.21.0"
+    "tsx": "^4.21.0",
+    "vitest": "^3.2.4",
+    "supertest": "^7.1.4",
+    "@types/supertest": "^6.0.3"
   }
 }
