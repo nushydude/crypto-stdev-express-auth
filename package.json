@@ -5,7 +5,7 @@
   "main": "api/index.js",
   "type": "module",
   "engines": {
-    "node": "20.x || 22.x"
+    "node": "20.x || 22.x || 24.x"
   },
   "scripts": {
     "start": "tsx api/index.ts",
